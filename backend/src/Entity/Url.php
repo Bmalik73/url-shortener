@@ -39,10 +39,20 @@ class Url
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $lastVisitedAt = null;
 
+    public function __construct()
+    {
+        // Initialiser createdAt dès la création de l'objet
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
-        $this->createdAt = new \DateTimeImmutable();
+        // Cette méthode est toujours utile si vous voulez vous assurer que
+        // createdAt est toujours défini juste avant la persistance
+        if (!isset($this->createdAt)) {
+            $this->createdAt = new \DateTimeImmutable();
+        }
     }
 
     public function getId(): ?int

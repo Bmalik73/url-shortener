@@ -13,7 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-#[Route('/api', name: 'api_')]
 class UrlController extends AbstractController
 {
     private SerializerInterface $serializer;
@@ -31,9 +30,24 @@ class UrlController extends AbstractController
     }
 
     /**
+     * Redirection vers l'URL originale
+     * Cette route est définie en dehors du groupe /api
+     */
+    #[Route('/{code}', name: 'redirect_url', methods: ['GET'], priority: 1)]
+    public function redirectToOriginalUrl(string $code): Response
+    {
+        try {
+            $originalUrl = $this->urlService->getOriginalUrl($code);
+            return $this->redirect($originalUrl);
+        } catch (UrlNotFoundException $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_NOT_FOUND);
+        }
+    }
+
+    /**
      * Création d'une URL raccourcie
      */
-    #[Route('/urls', name: 'create_url', methods: ['POST'])]
+    #[Route('/api/urls', name: 'api_create_url', methods: ['POST'])]
     public function createUrl(Request $request): JsonResponse
     {
         // Désérialiser la requête en DTO
@@ -64,7 +78,7 @@ class UrlController extends AbstractController
     /**
      * Récupération des informations d'une URL raccourcie
      */
-    #[Route('/urls/{code}', name: 'get_url', methods: ['GET'])]
+    #[Route('/api/urls/{code}', name: 'api_get_url', methods: ['GET'])]
     public function getUrl(string $code): JsonResponse
     {
         try {
@@ -76,23 +90,9 @@ class UrlController extends AbstractController
     }
 
     /**
-     * Redirection vers l'URL originale
-     */
-    #[Route('/{code}', name: 'redirect_url', methods: ['GET'])]
-    public function redirectToOriginalUrl(string $code): Response
-    {
-        try {
-            $originalUrl = $this->urlService->getOriginalUrl($code);
-            return $this->redirect($originalUrl);
-        } catch (UrlNotFoundException $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_NOT_FOUND);
-        }
-    }
-
-    /**
      * Recherche de l'URL originale à partir d'un code
      */
-    #[Route('/lookup', name: 'lookup_url', methods: ['POST'])]
+    #[Route('/api/lookup', name: 'api_lookup_url', methods: ['POST'])]
     public function lookupUrl(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
