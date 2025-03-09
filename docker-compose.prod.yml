@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile
+    container_name: url-shortener-backend
+    volumes:
+      - backend_data:/var/www/html/var
+    environment:
+      - APP_ENV=prod
+      - DATABASE_URL=sqlite:///%kernel.project_dir%/var/data.db
+      - URL_SHORTENER_DOMAIN=${DOMAIN:-url-shortener.example.com}
+    restart: always
+    networks:
+      - url-shortener-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/frontend/Dockerfile.prod
+    container_name: url-shortener-frontend
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - backend
+    networks:
+      - url-shortener-network
+
+networks:
+  url-shortener-network:
+    driver: bridge
+
+volumes:
+  backend_data:

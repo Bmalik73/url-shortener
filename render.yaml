@@ -1,0 +1,39 @@
+services:
+  # Backend service
+  - type: web
+    name: url-shortener-backend
+    env: docker
+    dockerfilePath: ./docker/backend/Dockerfile
+    dockerContext: .
+    envVars:
+      - key: APP_ENV
+        value: prod
+      - key: DATABASE_URL
+        value: sqlite:///%kernel.project_dir%/var/data.db
+      - key: URL_SHORTENER_DOMAIN
+        fromService:
+          name: url-shortener-frontend
+          type: web
+          property: host
+    disk:
+      name: data
+      mountPath: /var/www/html/var
+      sizeGB: 1
+
+  # Frontend service
+  - type: web
+    name: url-shortener-frontend
+    env: docker
+    dockerfilePath: ./docker/frontend/Dockerfile
+    dockerContext: ./frontend
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: VITE_API_URL
+        fromService:
+          name: url-shortener-backend
+          type: web
+          property: host
+          value: /api
+    domains:
+      - url-shortener-coton.onrender.com
