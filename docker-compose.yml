@@ -18,6 +18,25 @@ services:
     networks:
       - url-shortener-network
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/frontend/Dockerfile
+    container_name: url-shortener-frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://localhost:8000/api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - url-shortener-network
+    command: npm run dev -- --host 0.0.0.0
+
 networks:
   url-shortener-network:
     driver: bridge
