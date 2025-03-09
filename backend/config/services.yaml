@@ -1,4 +1,3 @@
-
 parameters:
     url_shortener.domain: '%env(URL_SHORTENER_DOMAIN)%'
     url_shortener.min_length: '%env(int:URL_SHORTENER_MIN_LENGTH)%'
@@ -16,6 +15,12 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    #App\Service\UrlEncoder:
-    #    arguments:
-    #        $minLength: '%url_shortener.min_length%'
+    App\Service\UrlEncoder:
+        arguments:
+            $minLength: '%url_shortener.min_length%'
+            
+    App\Service\UrlService:
+        arguments:
+            $urlRepository: '@App\Repository\UrlRepository'
+            $urlEncoder: '@App\Service\UrlEncoder'
+            $params: '@parameter_bag'
