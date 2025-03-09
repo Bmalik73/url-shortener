@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
           </div>
           
           <div className="flex items-center text-sm text-gray-500">
-            <span>Développé avec</span>
+            <span>Développé par Bokarka Abdelmalik avec</span>
             <FaHeart className="w-4 h-4 mx-1 text-red-500" />
             <span>pour le test technique COTON</span>
           </div>

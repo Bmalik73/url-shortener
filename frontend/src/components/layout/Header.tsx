@@ -17,7 +17,7 @@ const Header: React.FC = () => {
               Raccourcir
             </Link>
             <a 
-              href="https://github.com/votre-username/url-shortener" 
+              href="https://github.com/Bmalik73/url-shortener" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-sm font-medium text-gray-600 hover:text-primary-600"
