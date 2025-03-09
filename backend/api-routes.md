@@ -28,21 +28,24 @@ Crée une URL raccourcie à partir d'une URL longue.
 
 #### Exemple de requête
 
+
 curl -X POST http://localhost:8000/api/urls \
 -H "Content-Type: application/json" \
 -d '{"url":"https://www.example.com"}'
+```
 
 #### Exemple de réponse
 
-json:backend/api-routes.md
+
 {
-"originalUrl": "https://www.example.com",
-"shortUrl": "http://localhost:8000/shZEs1",
-"code": "shZEs1",
-"createdAt": "2025-03-09T20:55:38+00:00",
-"expiresAt": "2026-03-09T20:55:38+00:00",
-"visitCount": 0
+  "originalUrl": "https://www.example.com",
+  "shortUrl": "http://localhost:8000/shZEs1",
+  "code": "shZEs1",
+  "createdAt": "2025-03-09T20:55:38+00:00",
+  "expiresAt": "2026-03-09T20:55:38+00:00",
+  "visitCount": 0
 }
+```
 
 ### Obtenir les informations d'une URL raccourcie (api_get_url)
 
@@ -58,19 +61,22 @@ Récupère les informations d'une URL raccourcie à partir de son code.
 
 #### Exemple de requête
 
+
 curl -X GET http://localhost:8000/api/urls/shZEs1
+
 
 #### Exemple de réponse
 
-json:backend/api-routes.md
+
 {
-"originalUrl": "https://www.example.com",
-"shortUrl": "http://localhost:8000/shZEs1",
-"code": "shZEs1",
-"createdAt": "2025-03-09T20:55:38+00:00",
-"expiresAt": "2026-03-09T20:55:38+00:00",
-"visitCount": 1
+  "originalUrl": "https://www.example.com",
+  "shortUrl": "http://localhost:8000/shZEs1",
+  "code": "shZEs1",
+  "createdAt": "2025-03-09T20:55:38+00:00",
+  "expiresAt": "2026-03-09T20:55:38+00:00",
+  "visitCount": 1
 }
+
 
 ### Rechercher une URL par son code (api_lookup_url)
 
@@ -92,14 +98,14 @@ curl -X POST http://localhost:8000/api/lookup \
 
 #### Exemple de réponse
 
-json
+
 {
-"originalUrl": "https://www.example.com",
-"shortUrl": "http://localhost:8000/shZEs1",
-"code": "shZEs1",
-"createdAt": "2025-03-09T20:55:38+00:00",
-"expiresAt": "2026-03-09T20:55:38+00:00",
-"visitCount": 2
+  "originalUrl": "https://www.example.com",
+  "shortUrl": "http://localhost:8000/shZEs1",
+  "code": "shZEs1",
+  "createdAt": "2025-03-09T20:55:38+00:00",
+  "expiresAt": "2026-03-09T20:55:38+00:00",
+  "visitCount": 2
 }
 
 ### Rediriger vers l'URL originale (redirect_url)
@@ -113,6 +119,12 @@ Redirige directement vers l'URL originale à partir du code court.
 | Nom  | Type   | Description                | Requis |
 |------|--------|----------------------------|--------|
 | code | string | Code de l'URL raccourcie   | Oui    |
+
+#### Exemple de requête
+
+
+curl -L http://localhost:8000/shZEs1
+
 
 #### Comportement
 
@@ -131,3 +143,9 @@ Redirige (HTTP 302) vers l'URL originale correspondant au code.
 - Les URLs raccourcies peuvent avoir une date d'expiration. Après cette date, elles ne seront plus accessibles.
 - Le compteur de visites est incrémenté à chaque redirection.
 - Si aucune durée d'expiration n'est spécifiée, la valeur par défaut configurée sur le serveur sera utilisée.
+
+## Utilisation avec Docker
+
+Si vous utilisez Docker pour exécuter l'application, les exemples ci-dessus fonctionneront de la même manière. Assurez-vous simplement que le port exposé dans votre configuration Docker correspond au port utilisé dans les exemples (8000 par défaut).
+
+Pour plus d'informations sur l'exécution avec Docker, consultez le fichier README.md.
