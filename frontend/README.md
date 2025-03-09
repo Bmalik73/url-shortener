@@ -1,54 +1,67 @@
-# React + TypeScript + Vite
+# URL Shortener Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Ce projet est le frontend de l'application URL Shortener, développé avec React, TypeScript et Tailwind CSS.
 
-Currently, two official plugins are available:
+## Fonctionnalités
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Raccourcissement d'URLs
+- Affichage des statistiques d'utilisation
+- Interface utilisateur intuitive et responsive
+- Validation des formulaires
 
-## Expanding the ESLint configuration
+## Technologies utilisées
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React 18
+- TypeScript
+- Tailwind CSS
+- Vite
+- Vitest pour les tests
+- React Router pour la navigation
+- Axios pour les requêtes HTTP
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Prérequis
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Node.js (v16+)
+- npm ou yarn
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Installation
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+Pour démarrer votre application, vous pouvez maintenant exécuter:
+Pour démarrer le développement du frontend
+cd frontend
+npm install
+npm run dev
+L'application sera disponible sur http://localhost:3000
+Ou, avec Docker:
+Pour démarrer l'application complète avec Docker
+docker-compose up -d
+Le backend sera disponible sur http://localhost:8000
+Le frontend sera disponible sur http://localhost:3000
+frontend/
+├── public/ # Fichiers statiques
+├── src/ # Code source
+│ ├── components/ # Composants React
+│ ├── hooks/ # Hooks personnalisés
+│ ├── pages/ # Pages de l'application
+│ ├── services/ # Services (API, etc.)
+│ ├── types/ # Types TypeScript
+│ ├── utils/ # Utilitaires
+│ ├── App.tsx # Composant principal
+│ └── main.tsx # Point d'entrée
+├── tests/ # Tests
+└── ... # Fichiers de configuration
+
+## Tests
+
+Pour exécuter les tests:
+npm run test
+
+## Avantages
+
+Ce frontend est:
+
+- Typé avec TypeScript pour éviter les erreurs et améliorer la maintenabilité
+- Stylisé avec Tailwind CSS pour un design moderne et responsive
+- Testé avec Vitest et Testing Library
+- Bien organisé avec une architecture en composants
+- Dockerisé pour un déploiement facile
