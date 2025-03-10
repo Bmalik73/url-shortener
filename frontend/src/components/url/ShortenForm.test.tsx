@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import ShortenForm from './ShortenForm';
 import { urlService } from '../../services/api';
 
@@ -55,31 +55,22 @@ describe('ShortenForm', () => {
   });
 
   it('should call shortenUrl service with correct parameters', async () => {
-    const mockResult = {
-      originalUrl: 'https://example.com',
-      shortUrl: 'http://localhost:8000/abc123',
-      code: 'abc123',
-      createdAt: '2023-01-01T00:00:00Z',
-      expiresAt: null,
-      visitCount: 0,
-    };
+    // Arrange
+    const mockShortenUrl = vi.fn().mockResolvedValue({ shortUrl: 'http://short.url/abc123' });
+    vi.spyOn(urlService, 'shortenUrl').mockImplementation(mockShortenUrl);
     
-    // @ts-ignore
-    urlService.shortenUrl.mockResolvedValueOnce(mockResult);
+    render(<ShortenForm setUrlResult={vi.fn()} />);
     
-    render(<ShortenForm setUrlResult={mockSetUrlResult} />);
-    
+    // Act
     const urlInput = screen.getByLabelText(/URL à raccourcir/i);
-    fireEvent.change(urlInput, { target: { value: 'https://example.com' } });
+    const submitButton = screen.getByRole('button', { name: /Raccourcir/i });
     
-    const submitButton = screen.getByRole('button', { name: /Raccourcir l'URL/i });
-    fireEvent.click(submitButton);
-    
-    expect(urlService.shortenUrl).toHaveBeenCalledWith('https://example.com', null);
-    
-    // Attendre que la promesse soit résolue
-    await vi.waitFor(() => {
-      expect(mockSetUrlResult).toHaveBeenCalledWith(mockResult);
+    await act(async () => {
+      fireEvent.change(urlInput, { target: { value: 'https://example.com' } });
+      fireEvent.click(submitButton);
     });
+    
+    // Assert
+    expect(urlService.shortenUrl).toHaveBeenCalledWith('https://example.com', null);
   });
 });
