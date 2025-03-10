@@ -49,7 +49,7 @@ const ShortenForm: React.FC<ShortenFormProps> = ({ setUrlResult }) => {
           {...register('url', {
             required: 'L\'URL est requise',
             pattern: {
-              value: /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)?$/,
+              value: /^(https?:\/\/)?(www\.)?([\w-]+\.)+[a-zA-Z]{2,}(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/,
               message: 'Veuillez entrer une URL valide'
             }
           })}
