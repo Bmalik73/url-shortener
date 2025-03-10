@@ -18,8 +18,8 @@ services:
 
   frontend:
     build:
-      context: ./frontend
-      dockerfile: ../docker/frontend/Dockerfile.prod
+      context: .
+      dockerfile: docker/frontend/Dockerfile.prod
     container_name: url-shortener-frontend
     restart: always
     ports:
