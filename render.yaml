@@ -25,7 +25,7 @@ services:
     name: url-shortener-frontend
     env: docker
     dockerfilePath: ./docker/frontend/Dockerfile
-    dockerContext: ./frontend
+    dockerContext: .
     envVars:
       - key: NODE_ENV
         value: production
