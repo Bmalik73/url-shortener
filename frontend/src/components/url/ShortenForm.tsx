@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { UrlOutput } from '../../types/api';
 
 interface ShortenFormProps {
+  // eslint-disable-next-line no-unused-vars
   setUrlResult: (result: UrlOutput | null) => void;
 }
 
@@ -22,8 +23,8 @@ const ShortenForm: React.FC<ShortenFormProps> = ({ setUrlResult }) => {
     setIsLoading(true);
     try {
       const expiresInSeconds = data.expiresIn ? parseInt(data.expiresIn) : null;
-      const result = await urlService.shortenUrl(data.url, expiresInSeconds);
-      setUrlResult(result);
+      const response = await urlService.shortenUrl(data.url, expiresInSeconds);
+      setUrlResult(response);
       reset();
       toast.success('URL raccourcie avec succès !');
     } catch (error: any) {
@@ -48,7 +49,7 @@ const ShortenForm: React.FC<ShortenFormProps> = ({ setUrlResult }) => {
           {...register('url', {
             required: 'L\'URL est requise',
             pattern: {
-              value: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
+              value: /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)?$/,
               message: 'Veuillez entrer une URL valide'
             }
           })}

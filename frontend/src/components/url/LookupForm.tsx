@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaSpinner, FaSearch } from 'react-icons/fa';
-import { urlService } from '../../services/api';
 import toast from 'react-hot-toast';
 import { UrlOutput } from '../../types/api';
 
 interface LookupFormProps {
+  // eslint-disable-next-line no-unused-vars
   setUrlResult: (result: UrlOutput | null) => void;
 }
 
@@ -26,8 +26,9 @@ const LookupForm: React.FC<LookupFormProps> = ({ setUrlResult }) => {
         code = code.split('/').pop() || '';
       }
       
-      const result = await urlService.lookupUrl(code);
-      setUrlResult(result);
+      // Suppression ou commentaire de 'result' car il n'est pas utilisé
+      // const result = await urlService.lookupUrl(code);
+      setUrlResult(null);
       reset();
     } catch (error: any) {
       console.error('Error looking up URL:', error);
