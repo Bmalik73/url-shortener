@@ -1,203 +1,181 @@
-# URL Shortener - Backend
+# URL Shortener - Test Technique COTON
 
-Ce module backend fournit l'API REST pour le service de raccourcissement d'URL.
+Cette application permet de raccourcir des URLs longues en URLs courtes et faciles à partager, avec une interface utilisateur moderne et responsive.
 
-## Technologies utilisées
+## Fonctionnalités
 
-- **Symfony 6.4**: Framework PHP moderne pour le développement d'applications web
-- **PHP 8.1+**: Langage de programmation côté serveur
-- **SQLite**: Base de données légère et portable pour le stockage des URLs
-- **PHPUnit**: Framework de test pour PHP
-- **Docker**: Conteneurisation pour un déploiement facile et cohérent
+- **Raccourcissement d'URL**: Transforme des URLs longues en codes courts et uniques
+- **Redirection intelligente**: Redirige les utilisateurs depuis le code court vers l'URL originale
+- **Suivi des statistiques**: Comptabilise les visites de chaque URL raccourcie
+- **Gestion de l'expiration**: Permet de définir une durée de validité pour les URLs
+- **Interface responsive**: S'adapte parfaitement aux appareils mobiles et desktop
 
-## Installation
+## Architecture du projet
+
+### Structure du projet
+url-shortener/
+├── backend/                # API Symfony 6.4
+│   ├── src/                # Code source PHP
+│   ├── tests/              # Tests unitaires et fonctionnels
+│   └── ...
+├── frontend/               # Interface React TypeScript
+│   ├── src/                # Code source TypeScript/React
+│   ├── public/             # Fichiers statiques
+│   └── ...
+├── docker/                 # Configuration Docker
+│   ├── backend/            # Configuration pour le backend
+│   └── frontend/           # Configuration pour le frontend
+├── .github/workflows/      # Pipeline CI/CD GitHub Actions
+└── README.md               # Documentation
+
+### Technologies utilisées
+
+#### Backend
+- **Symfony 6.4**: Framework PHP moderne et robuste
+- **SQLite**: Base de données légère et portative
+- **PHPUnit**: Tests unitaires et fonctionnels
+- **API REST**: Endpoints bien définis pour les différentes opérations
+
+#### Frontend
+- **React**: Bibliothèque UI JavaScript
+- **TypeScript**: Pour un code plus fiable et maintenable
+- **Tailwind CSS**: Design moderne et responsive
+- **React Hook Form**: Gestion efficace des formulaires
+- **React Router**: Navigation entre les pages
+
+#### DevOps
+- **Docker**: Conteneurisation de l'application
+- **GitHub Actions**: Pipeline d'intégration et déploiement continus
+- **Render.com**: Déploiement cloud gratuit
+
+## Installation et lancement
 
 ### Prérequis
+- Docker et Docker Compose
+- Git
 
-- PHP 8.1 ou supérieur (pour l'installation locale)
-- Composer (pour l'installation locale)
-- Extensions PHP: pdo_sqlite, json, mbstring (pour l'installation locale)
-- Docker et Docker Compose (pour l'installation avec Docker)
+### Installation avec Docker (recommandé)
 
-### Installation locale
+```bash
+# Cloner le repository
+git clone https://github.com/votre-username/url-shortener.git
+cd url-shortener
 
+# Lancer les conteneurs
+docker-compose up -d
 
-# Cloner le projet (si ce n'est pas déjà fait)
-git clone https://github.com/Bmalik73/url-shortener.git
-cd url-shortener/backend
+# Accéder à l'application
+# Frontend: http://localhost:3000
+# Backend API: http://localhost:8000/api
+
+Installation en développement
+Backend (Symfony)
+cd backend
 
 # Installer les dépendances
 composer install
 
-# Configurer l'environnement
-# (optionnel) Copier le .env en .env.local et ajuster les paramètres si nécessaire
-cp .env .env.local
-
 # Créer la base de données
 php bin/console doctrine:database:create
-
-# Exécuter les migrations
 php bin/console doctrine:migrations:migrate
 
-# Démarrer le serveur
-php bin/console server:start
+# Lancer le serveur de développement
+php -S localhost:8000 -t public
 
+Frontend (React)
+cd frontend
 
-L'API sera accessible à l'adresse: http://localhost:8000/api
+# Installer les dépendances
+npm install
 
-### Installation avec Docker
+# Lancer le serveur de développement
+npm run dev
 
-# Cloner le projet (si ce n'est pas déjà fait)
-git clone https://github.com/Bmalik73/url-shortener.git
-cd url-shortener
+API Backend
+Le backend expose plusieurs endpoints REST:
+Méthode  Endpoint          Description
+POST    / api/urls         Créer une URL raccourcie 
+GET     /api/urls/{code}   Obtenir les informations d'une URL raccourcie
+POST    /api/lookup        Rechercher une URL par son code
+GET     /{code}            Rediriger vers l'URL originale
 
-# Rendre le script d'initialisation exécutable (uniquement pour Linux/Mac)
-chmod +x docker/backend/init.sh
-
-# Construire et démarrer les conteneurs
-docker-compose build
-docker-compose up -d
-
-
-L'API sera accessible à l'adresse: http://localhost:8000/api
-
-### Vérification de l'installation
-
-Pour vérifier que l'API fonctionne correctement, vous pouvez exécuter la commande suivante :
-
-
+Exemple d'utilisation
+# Créer une URL raccourcie
 curl -X POST http://localhost:8000/api/urls \
--H "Content-Type: application/json" \
--d '{"url":"https://www.example.com"}'
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://www.example.com"}'
 
+# Réponse
+{
+  "originalUrl": "https://www.example.com",
+  "shortUrl": "http://localhost:8000/abc123",
+  "code": "abc123",
+  "createdAt": "2023-01-01T12:00:00+00:00",
+  "expiresAt": "2024-01-01T12:00:00+00:00",
+  "visitCount": 0
+}
 
-Vous devriez recevoir une réponse JSON contenant les informations de l'URL raccourcie.
-
-## Architecture
-
-L'application suit une architecture en couches:
-
-- **Controllers**: Points d'entrée de l'API
-- **Services**: Logique métier
-- **Repository**: Accès aux données
-- **Entities**: Modèles de données
-- **DTOs**: Objets de transfert de données
-
-## Documentation API
-
-Consultez le fichier api-routes.md pour une documentation détaillée des endpoints disponibles.
-
-## Tests
-
-Le projet inclut une suite complète de tests unitaires et fonctionnels pour garantir la qualité et la fiabilité du code.
-
-### Exécution des tests
-# Exécuter tous les tests
+Tests
+Backend
+cd backend
 php bin/phpunit
 
-# Exécuter un test spécifique
-php bin/phpunit tests/Service/UrlEncoderTest.php
+Frontend
+cd frontend
+npm test
 
-# Exécuter une méthode de test spécifique
-php bin/phpunit --filter testEncode tests/Service/UrlEncoderTest.php
+Déploiement
+L'application est configurée pour être déployée automatiquement sur Render.com via GitHub Actions:
 
+Chaque commit sur la branche main déclenche les tests
+Si les tests passent, les images Docker sont construites
+Les nouvelles images sont déployées sur Render.com
 
-### Exécution des tests avec Docker
+URL de l'application déployée
 
+Frontend: https://url-shortener-frontend.onrender.com
+API Backend: https://url-shortener-backend.onrender.com
 
-# Exécuter tous les tests
-docker exec -it url-shortener-backend php bin/phpunit
+Choix techniques et architecture
+Stratégie d'encodage des URLs
+Pour générer des codes courts uniques, j'ai utilisé une approche combinant:
 
-# Exécuter un test spécifique
-docker exec -it url-shortener-backend php bin/phpunit tests/Service/UrlEncoderTest.php
+Une génération de codes aléatoires en base62 (a-z, A-Z, 0-9)
+Une vérification d'unicité avec retry en cas de collision
+Une longueur minimale configurable (actuellement 6 caractères)
 
+Cette approche offre:
 
-### Structure des tests
+Une excellente distribution (62^6 = 56+ milliards de combinaisons possibles)
+Des URLs courtes et lisibles
+Une faible probabilité de collision
 
-Les tests sont organisés selon la structure suivante :
+Architecture en couches
+Le backend suit une architecture en couches rigoureuse:
 
-- **Tests unitaires** : Testent les composants individuels de l'application
-  - `tests/Service/UrlEncoderTest.php` : Tests pour le service d'encodage d'URL
-  - `tests/Service/UrlServiceTest.php` : Tests pour le service principal de gestion des URLs
+Controllers: Points d'entrée de l'API
+DTOs: Objets de transfert de données pour l'API
+Services: Logique métier
+Repositories: Accès aux données
+Entities: Modèles de données
 
-- **Tests fonctionnels** : Testent l'application dans son ensemble
-  - `tests/Controller/UrlControllerTest.php` : Tests pour les endpoints de l'API
+Le frontend utilise une architecture en composants avec:
 
-### Couverture des tests
+Pages: Composants de haut niveau pour chaque route
+Components: Éléments UI réutilisables
+Services: Communication avec l'API
+Hooks: Logique réutilisable
 
-Les tests couvrent les fonctionnalités principales de l'application :
+Améliorations futures
+Voici quelques améliorations que je pourrais apporter au projet avec plus de temps:
 
-1. **Création d'URLs raccourcies**
-   - Validation des entrées
-   - Génération de codes uniques
-   - Gestion des dates d'expiration
+Authentification: Ajout d'un système d'authentification pour que les utilisateurs puissent gérer leurs URLs
+Dashboard: Interface d'administration pour visualiser les statistiques
+QR Codes: Génération de QR codes pour les URLs raccourcies
+Analytics avancées: Suivi détaillé des visites (localisation, appareil, etc.)
+Personnalisation des codes: Permettre aux utilisateurs de choisir leurs propres codes
+Migration vers PostgreSQL: Pour une meilleure scalabilité en production
+Cache distribué: Utilisation de Redis pour les URLs fréquemment accédées
 
-2. **Redirection vers les URLs originales**
-   - Redirection correcte
-   - Gestion des URLs expirées
-   - Gestion des codes inexistants
-
-3. **Récupération des informations sur les URLs**
-   - Obtention des métadonnées (date de création, expiration, etc.)
-   - Comptage des visites
-
-4. **Encodage et décodage des URLs**
-   - Conversion entre IDs et codes courts
-   - Génération de codes aléatoires
-   - Validation de l'unicité des codes
-
-### Base de données de test
-
-Les tests fonctionnels utilisent une base de données SQLite en mémoire pour garantir l'isolation et la rapidité des tests. La configuration de test est définie dans le fichier `.env.test`.
-
-## Commandes utiles
-
-### Commandes Symfony
-
-
-# Nettoyer les URLs expirées
-php bin/console app:CleanupUrlsCommand
-
-# Avec Docker
-docker exec -it url-shortener-backend php bin/console app:CleanupUrlsCommand
-
-
-### Commandes Docker
-
-
-# Démarrer les conteneurs
-docker-compose up -d
-
-# Arrêter les conteneurs
-docker-compose down
-
-# Voir les logs
-docker-compose logs -f
-
-# Accéder au shell du conteneur
-docker exec -it url-shortener-backend bash
-
-
-## Développement
-
-### Accès à la base de données
-
-La base de données SQLite est stockée dans le fichier `var/data.db`. Vous pouvez y accéder directement avec un client SQLite ou via le conteneur Docker :
-
-
-# Accès direct (installation locale)
-sqlite3 var/data.db
-
-# Accès via Docker
-docker exec -it url-shortener-backend sqlite3 var/data.db
-
-
-### Modification de la configuration
-
-Les principaux paramètres de configuration se trouvent dans le fichier `.env` :
-
-- `URL_SHORTENER_DOMAIN` : Domaine utilisé pour les URLs raccourcies
-- `URL_SHORTENER_MIN_LENGTH` : Longueur minimale des codes générés
-- `URL_SHORTENER_MAX_AGE` : Durée de validité par défaut des URLs (en secondes)
-
-Pour modifier ces paramètres dans un environnement Docker, vous pouvez les définir dans le fichier `docker-compose.yml` sous la section `environment`.
+Conclusion
+Cette application démontre une implémentation complète d'un service de raccourcissement d'URL avec une architecture moderne, des tests robustes et un déploiement automatisé. Les choix techniques ont été faits en privilégiant la maintenabilité, la scalabilité et la qualité du code.
