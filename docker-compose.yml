@@ -20,8 +20,8 @@ services:
 
   frontend:
     build:
-      context: ./frontend
-      dockerfile: ../docker/frontend/Dockerfile
+      context: .
+      dockerfile: docker/frontend/Dockerfile
     container_name: url-shortener-frontend
     volumes:
       - ./frontend:/app
